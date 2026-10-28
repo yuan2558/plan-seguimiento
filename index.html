@@ -1,0 +1,945 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Plan de Seguimiento</title>
+
+<style>
+:root {
+  --navy: #142d4e;
+  --blue: #24558a;
+  --light: #edf3f9;
+  --border: #dfe6ee;
+  --text: #26364a;
+  --muted: #718096;
+  --green: #21845b;
+  --orange: #c17a20;
+  --red: #bd4545;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f9;
+  color: var(--text);
+}
+
+button, select, input, textarea {
+  font: inherit;
+}
+
+button { cursor: pointer; }
+
+.login {
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.login-card {
+  width: 100%;
+  max-width: 430px;
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 38px;
+  box-shadow: 0 8px 30px #142d4e12;
+}
+
+.logo {
+  width: 55px;
+  height: 55px;
+  background: var(--navy);
+  color: white;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-size: 25px;
+  font-weight: bold;
+  margin-bottom: 20px;
+}
+
+.login h1 { color: var(--navy); margin: 0 0 8px; }
+.subtitle { color: var(--muted); font-size: 14px; line-height: 1.5; }
+
+label {
+  display: block;
+  font-size: 13px;
+  font-weight: bold;
+  margin: 18px 0 8px;
+}
+
+select, input, textarea {
+  width: 100%;
+  padding: 11px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: white;
+  color: var(--text);
+}
+
+.primary {
+  background: var(--navy);
+  color: white;
+  border: none;
+  padding: 12px 18px;
+  border-radius: 6px;
+  font-weight: bold;
+}
+
+.primary:hover { background: var(--blue); }
+
+.login .primary { width: 100%; margin-top: 22px; }
+
+.app { display: none; min-height: 100vh; }
+
+.sidebar {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 245px;
+  background: var(--navy);
+  color: white;
+  padding: 25px 16px;
+}
+
+.brand {
+  font-size: 19px;
+  font-weight: bold;
+  padding: 0 10px 25px;
+  border-bottom: 1px solid #ffffff25;
+}
+
+.brand small {
+  display: block;
+  font-size: 11px;
+  color: #b8c8da;
+  font-weight: normal;
+  margin-top: 7px;
+}
+
+.nav-title {
+  color: #a9bbcf;
+  font-size: 10px;
+  letter-spacing: 1px;
+  margin: 28px 10px 12px;
+}
+
+.nav-btn {
+  width: 100%;
+  background: transparent;
+  color: #dce6f1;
+  border: none;
+  padding: 12px;
+  text-align: left;
+  border-radius: 6px;
+  margin-bottom: 5px;
+}
+
+.nav-btn:hover, .nav-btn.active {
+  background: #ffffff1b;
+  color: white;
+}
+
+.logout {
+  position: absolute;
+  bottom: 25px;
+  left: 16px;
+  width: calc(100% - 32px);
+  border: 1px solid #ffffff40;
+  color: white;
+  background: transparent;
+  padding: 11px;
+  border-radius: 6px;
+}
+
+.main {
+  margin-left: 245px;
+  padding: 28px 32px;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 15px;
+  margin-bottom: 28px;
+}
+
+.topbar h1 { margin: 0; color: var(--navy); font-size: 25px; }
+
+.user-info { text-align: right; font-size: 13px; }
+.user-info small { display: block; color: var(--muted); margin-top: 4px; }
+
+.section { display: none; }
+.section.active { display: block; }
+
+.section-description {
+  color: var(--muted);
+  font-size: 14px;
+  margin: -15px 0 23px;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 25px;
+}
+
+.card {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 20px;
+}
+
+.card-label { font-size: 13px; color: var(--muted); }
+.card-number { font-size: 29px; font-weight: bold; color: var(--navy); margin-top: 12px; }
+.card-note { font-size: 11px; color: var(--muted); margin-top: 6px; }
+
+.panel {
+  background: white;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  padding: 22px;
+  margin-bottom: 22px;
+}
+
+.panel h3 { margin: 0 0 18px; color: var(--navy); font-size: 16px; }
+
+.filters {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 13px;
+  margin-bottom: 18px;
+}
+
+.filters label { margin-top: 0; }
+
+.table-wrap { overflow-x: auto; }
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13px;
+  min-width: 700px;
+}
+
+th {
+  background: #f2f5f9;
+  color: #52647a;
+  text-align: left;
+  font-size: 11px;
+  padding: 13px 10px;
+}
+
+td {
+  padding: 14px 10px;
+  border-bottom: 1px solid #edf0f4;
+}
+
+.status {
+  display: inline-block;
+  padding: 5px 9px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: bold;
+}
+
+.done { background: #e5f4eb; color: var(--green); }
+.progress { background: #fff2dc; color: var(--orange); }
+.pending { background: #fce9e9; color: var(--red); }
+
+.bar {
+  height: 8px;
+  width: 100%;
+  background: #e8edf3;
+  border-radius: 10px;
+  overflow: hidden;
+  margin-top: 7px;
+}
+
+.bar-fill {
+  height: 100%;
+  background: #2b689e;
+  border-radius: 10px;
+}
+
+.edit-btn {
+  border: 1px solid var(--border);
+  background: white;
+  color: var(--blue);
+  padding: 7px 11px;
+  border-radius: 5px;
+  font-size: 12px;
+}
+
+.program-row { margin-bottom: 20px; }
+.program-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 7px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 15px;
+}
+
+.form-grid label { margin-top: 5px; }
+
+textarea { resize: vertical; min-height: 90px; }
+
+.save-btn { margin-top: 18px; }
+
+.notice {
+  background: #fff8e9;
+  color: #76551c;
+  border: 1px solid #f0dfb8;
+  border-radius: 7px;
+  padding: 12px;
+  font-size: 12px;
+  line-height: 1.5;
+  margin-bottom: 20px;
+}
+
+.empty {
+  text-align: center;
+  color: var(--muted);
+  padding: 35px;
+}
+
+@media(max-width: 900px) {
+  .cards { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media(max-width: 650px) {
+  .sidebar {
+    position: relative;
+    width: 100%;
+    padding: 15px;
+  }
+
+  .brand { padding-bottom: 15px; }
+  .nav-title { margin-top: 15px; }
+  .logout { position: static; width: 100%; margin-top: 10px; }
+  .main { margin-left: 0; padding: 20px 14px; }
+  .topbar { align-items: flex-start; flex-direction: column; }
+  .user-info { text-align: left; }
+  .filters, .form-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+
+<body>
+
+<!-- PANTALLA DE ACCESO -->
+
+<div class="login" id="login">
+  <div class="login-card">
+    <div class="logo">PS</div>
+    <h1>Plan de Seguimiento</h1>
+    <p class="subtitle">
+      Sistema institucional para el control y seguimiento
+      de actividades y programas.
+    </p>
+
+    <label for="roleSelect">Selecciona tu cargo</label>
+    <select id="roleSelect">
+      <option value="Coordinador de proyectos">Coordinador de proyectos</option>
+      <option value="Coordinador administrativo">Coordinador administrativo</option>
+      <option value="Director financiero">Director financiero</option>
+      <option value="Jefe de talento humano">Jefe de talento humano</option>
+      <option value="Administrador">Administrador general</option>
+    </select>
+
+    <button class="primary" onclick="loginUser()">Ingresar al sistema</button>
+  </div>
+</div>
+
+<!-- APLICACIÓN -->
+
+<div class="app" id="app">
+
+  <aside class="sidebar">
+    <div class="brand">
+      PLAN DE SEGUIMIENTO
+      <small>Gestión institucional</small>
+    </div>
+
+    <div class="nav-title">MENÚ PRINCIPAL</div>
+
+    <button class="nav-btn active" id="navDashboard"
+      onclick="showSection('dashboard',this)">
+      ▦ &nbsp; Tablero general
+    </button>
+
+    <button class="nav-btn" id="navActivities"
+      onclick="showSection('activities',this)">
+      ☷ &nbsp; Mis actividades
+    </button>
+
+    <button class="nav-btn" id="navReports"
+      onclick="showSection('reports',this)">
+      ◫ &nbsp; Avance por programa
+    </button>
+
+    <button class="logout" onclick="logoutUser()">Cerrar sesión</button>
+  </aside>
+
+  <main class="main">
+
+    <div class="topbar">
+      <div>
+        <h1 id="pageTitle">Tablero general</h1>
+        <p class="subtitle">Seguimiento y cumplimiento de actividades</p>
+      </div>
+
+      <div class="user-info">
+        <strong id="userName"></strong>
+        <small id="userRole"></small>
+      </div>
+    </div>
+
+    <!-- TABLERO GENERAL -->
+
+    <section class="section active" id="dashboard">
+
+      <div class="notice">
+        Vista general de seguimiento. Utiliza los filtros para consultar
+        los resultados por responsable, área y programa.
+      </div>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-label">Total de actividades</div>
+          <div class="card-number" id="total">0</div>
+          <div class="card-note">Actividades registradas</div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">Actividades cumplidas</div>
+          <div class="card-number" id="completed">0</div>
+          <div class="card-note">Con avance del 100%</div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">En proceso</div>
+          <div class="card-number" id="inProgress">0</div>
+          <div class="card-note">Actividades en desarrollo</div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">Pendientes</div>
+          <div class="card-number" id="pending">0</div>
+          <div class="card-note">Sin iniciar</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom:22px">
+        <div class="card-label">Porcentaje general de cumplimiento</div>
+        <div class="card-number" id="generalPercent">0%</div>
+        <div class="bar">
+          <div class="bar-fill" id="generalBar" style="width:0%"></div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Consultar actividades</h3>
+
+        <div class="filters">
+          <div>
+            <label for="filterResponsible">Responsable</label>
+            <select id="filterResponsible" onchange="renderDashboard()">
+              <option value="">Todos</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="filterArea">Área</label>
+            <select id="filterArea" onchange="renderDashboard()">
+              <option value="">Todas</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="filterProgram">Programa</label>
+            <select id="filterProgram" onchange="renderDashboard()">
+              <option value="">Todos</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Actividad</th>
+                <th>Programa</th>
+                <th>Área</th>
+                <th>Responsable</th>
+                <th>Avance</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            <tbody id="dashboardTable"></tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- MIS ACTIVIDADES -->
+
+    <section class="section" id="activities">
+      <p class="section-description">
+        Consulta y actualiza el cumplimiento de tus actividades asignadas.
+      </p>
+
+      <div class="cards">
+        <div class="card">
+          <div class="card-label">Mis actividades</div>
+          <div class="card-number" id="myTotal">0</div>
+        </div>
+
+        <div class="card">
+          <div class="card-label">Cumplidas</div>
+          <div class="card-number" id="myCompleted">0</div>
+        </div>
+      </div>
+
+      <div class="panel">
+        <h3>Listado de actividades asignadas</h3>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Actividad</th>
+                <th>Programa</th>
+                <th>Fecha límite</th>
+                <th>Avance</th>
+                <th>Estado</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody id="myTable"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="panel" id="editPanel" style="display:none">
+        <h3>Actualizar actividad</h3>
+        <p id="editName" style="font-weight:bold"></p>
+
+        <input type="hidden" id="editId">
+
+        <div class="form-grid">
+          <div>
+            <label for="editPercent">Porcentaje de cumplimiento</label>
+            <input type="number" id="editPercent" min="0" max="100">
+          </div>
+
+          <div>
+            <label for="editStatus">Estado</label>
+            <select id="editStatus">
+              <option value="Pendiente">Pendiente</option>
+              <option value="En proceso">En proceso</option>
+              <option value="Cumplida">Cumplida</option>
+            </select>
+          </div>
+        </div>
+
+        <label for="editObservation">Observaciones</label>
+        <textarea id="editObservation" placeholder="Escribe las observaciones..."></textarea>
+
+        <button class="primary save-btn" onclick="saveActivity()">Guardar cambios</button>
+        <button class="edit-btn" onclick="closeEditor()">Cancelar</button>
+      </div>
+    </section>
+
+    <!-- AVANCE POR PROGRAMA -->
+
+    <section class="section" id="reports">
+      <p class="section-description">
+        Consulta el porcentaje de cumplimiento de cada programa.
+      </p>
+
+      <div class="panel">
+        <h3>Avance por programa</h3>
+        <div id="programReports"></div>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+
+// DATOS DE DEMOSTRACIÓN
+
+const initialActivities = [
+  {
+    id: 1,
+    activity: "Elaborar plan de trabajo del programa",
+    program: "Programa A",
+    area: "Proyectos",
+    responsible: "Coordinador de proyectos",
+    deadline: "2026-11-15",
+    percent: 100,
+    status: "Cumplida",
+    observation: ""
+  },
+  {
+    id: 2,
+    activity: "Realizar seguimiento a las actividades",
+    program: "Programa A",
+    area: "Proyectos",
+    responsible: "Coordinador de proyectos",
+    deadline: "2026-11-30",
+    percent: 60,
+    status: "En proceso",
+    observation: ""
+  },
+  {
+    id: 3,
+    activity: "Presentar informe de resultados",
+    program: "Programa B",
+    area: "Proyectos",
+    responsible: "Coordinador de proyectos",
+    deadline: "2026-12-10",
+    percent: 0,
+    status: "Pendiente",
+    observation: ""
+  },
+  {
+    id: 4,
+    activity: "Organizar documentación administrativa",
+    program: "Programa C",
+    area: "Administrativa",
+    responsible: "Coordinador administrativo",
+    deadline: "2026-11-20",
+    percent: 75,
+    status: "En proceso",
+    observation: ""
+  },
+  {
+    id: 5,
+    activity: "Revisar ejecución presupuestal",
+    program: "Programa D",
+    area: "Financiera",
+    responsible: "Director financiero",
+    deadline: "2026-12-01",
+    percent: 30,
+    status: "En proceso",
+    observation: ""
+  },
+  {
+    id: 6,
+    activity: "Actualizar plan de capacitación",
+    program: "Programa E",
+    area: "Talento humano",
+    responsible: "Jefe de talento humano",
+    deadline: "2026-12-05",
+    percent: 0,
+    status: "Pendiente",
+    observation: ""
+  }
+];
+
+// ALMACENAMIENTO LOCAL TEMPORAL
+
+let activities;
+
+try {
+  activities = JSON.parse(localStorage.getItem("planActivities")) || initialActivities;
+} catch (error) {
+  activities = initialActivities;
+}
+
+let currentRole = "";
+
+function persist() {
+  localStorage.setItem("planActivities", JSON.stringify(activities));
+}
+
+function escapeHTML(value) {
+  return String(value ?? "").replace(/[&<>"']/g, char => ({
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    '"': "&quot;",
+    "'": "&#39;"
+  })[char]);
+}
+
+function statusFromPercent(percent) {
+  if (percent === 100) return "Cumplida";
+  if (percent === 0) return "Pendiente";
+  return "En proceso";
+}
+
+function statusClass(status) {
+  if (status === "Cumplida") return "done";
+  if (status === "Pendiente") return "pending";
+  return "progress";
+}
+
+// INGRESO
+
+function loginUser() {
+  currentRole = document.getElementById("roleSelect").value;
+
+  document.getElementById("login").style.display = "none";
+  document.getElementById("app").style.display = "block";
+
+  document.getElementById("userName").textContent = currentRole;
+  document.getElementById("userRole").textContent =
+    currentRole === "Administrador" ? "Vista administrativa" : "Panel de responsable";
+
+  document.getElementById("navDashboard").style.display =
+    currentRole === "Administrador" ? "block" : "none";
+
+  document.getElementById("navReports").style.display =
+    currentRole === "Administrador" ? "block" : "none";
+
+  showSection(
+    currentRole === "Administrador" ? "dashboard" : "activities",
+    currentRole === "Administrador"
+      ? document.getElementById("navDashboard")
+      : document.getElementById("navActivities")
+  );
+
+  renderAll();
+}
+
+function logoutUser() {
+  currentRole = "";
+  closeEditor();
+  document.getElementById("app").style.display = "none";
+  document.getElementById("login").style.display = "flex";
+}
+
+function showSection(id, button) {
+  document.querySelectorAll(".section").forEach(section =>
+    section.classList.remove("active")
+  );
+
+  document.getElementById(id).classList.add("active");
+
+  document.querySelectorAll(".nav-btn").forEach(nav =>
+    nav.classList.remove("active")
+  );
+
+  if (button) button.classList.add("active");
+
+  const titles = {
+    dashboard: "Tablero general",
+    activities: "Mis actividades",
+    reports: "Avance por programa"
+  };
+
+  document.getElementById("pageTitle").textContent = titles[id];
+}
+
+// FILTROS
+
+function setupFilters() {
+  const responsible = [...new Set(activities.map(a => a.responsible))];
+  const areas = [...new Set(activities.map(a => a.area))];
+  const programs = [...new Set(activities.map(a => a.program))];
+
+  fillSelect("filterResponsible", responsible, "Todos");
+  fillSelect("filterArea", areas, "Todas");
+  fillSelect("filterProgram", programs, "Todos");
+}
+
+function fillSelect(id, values, firstLabel) {
+  const select = document.getElementById(id);
+  const previous = select.value;
+
+  select.innerHTML =
+    `<option value="">${firstLabel}</option>` +
+    values.map(v =>
+      `<option value="${escapeHTML(v)}">${escapeHTML(v)}</option>`
+    ).join("");
+
+  select.value = values.includes(previous) ? previous : "";
+}
+
+// TABLERO GENERAL
+
+function renderDashboard() {
+  let data = activities;
+
+  const responsible = document.getElementById("filterResponsible").value;
+  const area = document.getElementById("filterArea").value;
+  const program = document.getElementById("filterProgram").value;
+
+  if (responsible) data = data.filter(a => a.responsible === responsible);
+  if (area) data = data.filter(a => a.area === area);
+  if (program) data = data.filter(a => a.program === program);
+
+  const total = data.length;
+  const completed = data.filter(a => a.status === "Cumplida").length;
+  const pending = data.filter(a => a.status === "Pendiente").length;
+  const inProgress = data.filter(a => a.status === "En proceso").length;
+
+  const average = total
+    ? Math.round(data.reduce((sum, a) => sum + a.percent, 0) / total)
+    : 0;
+
+  document.getElementById("total").textContent = total;
+  document.getElementById("completed").textContent = completed;
+  document.getElementById("pending").textContent = pending;
+  document.getElementById("inProgress").textContent = inProgress;
+  document.getElementById("generalPercent").textContent = average + "%";
+  document.getElementById("generalBar").style.width = average + "%";
+
+  document.getElementById("dashboardTable").innerHTML = data.length
+    ? data.map(a => `
+      <tr>
+        <td>${escapeHTML(a.activity)}</td>
+        <td>${escapeHTML(a.program)}</td>
+        <td>${escapeHTML(a.area)}</td>
+        <td>${escapeHTML(a.responsible)}</td>
+        <td>${a.percent}%</td>
+        <td><span class="status ${statusClass(a.status)}">${escapeHTML(a.status)}</span></td>
+      </tr>
+    `).join("")
+    : `<tr><td colspan="6" class="empty">No hay actividades para estos filtros.</td></tr>`;
+}
+
+// ACTIVIDADES DEL RESPONSABLE
+
+function renderMyActivities() {
+  const data = activities.filter(a => a.responsible === currentRole);
+
+  document.getElementById("myTotal").textContent = data.length;
+  document.getElementById("myCompleted").textContent =
+    data.filter(a => a.status === "Cumplida").length;
+
+  document.getElementById("myTable").innerHTML = data.length
+    ? data.map(a => `
+      <tr>
+        <td>${escapeHTML(a.activity)}</td>
+        <td>${escapeHTML(a.program)}</td>
+        <td>${escapeHTML(a.deadline)}</td>
+        <td>
+          ${a.percent}%
+          <div class="bar">
+            <div class="bar-fill" style="width:${a.percent}%"></div>
+          </div>
+        </td>
+        <td><span class="status ${statusClass(a.status)}">${escapeHTML(a.status)}</span></td>
+        <td><button class="edit-btn" onclick="editActivity(${a.id})">Editar</button></td>
+      </tr>
+    `).join("")
+    : `<tr><td colspan="6" class="empty">No tienes actividades asignadas.</td></tr>`;
+}
+
+// EDICIÓN
+
+function editActivity(id) {
+  const a = activities.find(item => item.id === id);
+
+  if (!a || a.responsible !== currentRole) return;
+
+  document.getElementById("editPanel").style.display = "block";
+  document.getElementById("editId").value = a.id;
+  document.getElementById("editName").textContent = a.activity;
+  document.getElementById("editPercent").value = a.percent;
+  document.getElementById("editStatus").value = a.status;
+  document.getElementById("editObservation").value = a.observation || "";
+
+  document.getElementById("editPanel").scrollIntoView({behavior:"smooth"});
+}
+
+function closeEditor() {
+  document.getElementById("editPanel").style.display = "none";
+}
+
+function saveActivity() {
+  const id = Number(document.getElementById("editId").value);
+  const a = activities.find(item => item.id === id);
+
+  if (!a || a.responsible !== currentRole) return;
+
+  const percent = Number(document.getElementById("editPercent").value);
+  const status = document.getElementById("editStatus").value;
+
+  if (!Number.isInteger(percent) || percent < 0 || percent > 100) {
+    alert("El porcentaje debe estar entre 0 y 100.");
+    return;
+  }
+
+  if ((percent === 100 && status !== "Cumplida") ||
+      (percent < 100 && status === "Cumplida") ||
+      (percent === 0 && status !== "Pendiente") ||
+      (percent > 0 && percent < 100 && status !== "En proceso")) {
+    alert("El estado debe corresponder al porcentaje: 0% pendiente, 1%-99% en proceso y 100% cumplida.");
+    return;
+  }
+
+  a.percent = percent;
+  a.status = status;
+  a.observation = document.getElementById("editObservation").value;
+
+  persist();
+  closeEditor();
+  renderAll();
+
+  alert("Cambios guardados en este navegador.");
+}
+
+// INFORMES POR PROGRAMA
+
+function renderReports() {
+  const programs = [...new Set(activities.map(a => a.program))];
+
+  document.getElementById("programReports").innerHTML =
+    programs.map(program => {
+      const data = activities.filter(a => a.program === program);
+      const average = Math.round(
+        data.reduce((sum, a) => sum + a.percent, 0) / data.length
+      );
+
+      return `
+        <div class="program-row">
+          <div class="program-header">
+            <strong>${escapeHTML(program)}</strong>
+            <strong>${average}%</strong>
+          </div>
+          <div class="bar">
+            <div class="bar-fill" style="width:${average}%"></div>
+          </div>
+          <small style="color:#718096">
+            ${data.filter(a => a.status === "Cumplida").length}
+            de ${data.length} actividades cumplidas
+          </small>
+        </div>
+      `;
+    }).join("");
+}
+
+// ACTUALIZAR PANTALLAS
+
+function renderAll() {
+  setupFilters();
+  renderDashboard();
+  renderMyActivities();
+  renderReports();
+}
+
+</script>
+
+</body>
+</html>
